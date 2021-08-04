@@ -26,6 +26,7 @@ class Interface:
             )
         return res
     
+
     '''【User用户管理模块2.0】'''
     #创建用户组
     def createGroup(self,title,roles,parentId,headers):
@@ -405,11 +406,11 @@ class Interface:
             "phoneNumber":phoneNumber,
             "phonePrefix":phonePrefix,
             "corpSsm":[{"name":name,
-                        "path":path}],
+                        "photo": photo}],
             "corpCard":[{"name":name,
-                        "path":path}],
+                        "photo": photo}],
             "corpDoc":[{"name":name,
-                        "path":path}],
+                        "photo": photo}],
             "remarks":remarks
         },headers=headers)
         return res
@@ -422,8 +423,8 @@ class Interface:
             "id":id
         },headers=headers)
         return res
-    #审核通过
-    def auditSuccess(self,resourceId,id,headers):
+    #审核通过Seller
+    def auditSuccessSeller(self,resourceId,id,headers):
         headers.update({'resourceId':resourceId})
         path = "/seller/admin/api/seller/auditSuccess"
         res = requests.post(self.url+path,json={
@@ -435,12 +436,159 @@ class Interface:
         path = "/seller/admin/api/seller/sellerAccountHistory/"
         res = requests.get(self.url+path+id,headers=headers)
         return res
-    #审核失败
-    def auditFail(self,id,comment,headers):
+    #审核失败Seller
+    def auditFailSeller(self,id,comment,headers):
         path = "/seller/admin/api/seller/auditFail"
         res = requests.post(self.url+path,json={
             "id":id,
             "comment":comment
         },headers=headers)
         return res
-    #
+    #审核退回
+    def auditRevise(self,id,comment,headers):
+        path = "/seller/admin/api/seller/auditRevise"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "comment":comment
+        },headers=headers)
+        return res
+    #上传图片成功
+    def uploadResultSeller(self,photo,headers):
+        path = "/selle/admin/api/seller/uploadResult"
+        res = requests.post(self.url+path,json={
+            "photo": photo
+        },headers=headers)
+        return res
+    #查询获取可查看审核人
+    def getSellerExecutive(self,headers):
+        path = "/seller/admin/api/seller/getSellerExecutive"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #保存修改信息
+    def saveEditInfoSeller(self,id,info,headers):
+        path = "/seller/admin/api/seller/saveEditInfo"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "info":[{
+                "createdTime":createdTime,
+                "email":email,
+                "name":name,
+                "phoneNumber":phoneNumber,
+                "type":type
+            }]
+        },headers=headers)
+        return res
+
+
+    '''【Dealer2.0】'''
+    #获取dealer列表
+    def getDealerList(self,createdBy,createdTime,headers):
+        path = "/dealer/admin/api/dealer/getDealerList"
+        res = requests.get(self.url+path,params={
+            "createdBy":createdBy,
+            "createdTime":createdTime
+        },headers=headers)
+        return res
+    #文件上传结果
+    def uploadResultDealer(self,photo,headers):
+        path = "/dealer/admin/api/dealer/uploadResult"
+        res = requests.post(self.url+path,json={
+            "photo": photo
+        },headers=headers)
+        return res
+    #获取可选经办人列表
+    def getDealerExecutive(self,resourceId,id,headers):
+        headers.update({'resourceId':resourceId})
+        path = "/dealer/admin/api/dealer/getDealerExecutive/"
+        res = requests.get(self.url+path+id,headers=headers)
+        return res
+    #获取所有经办人列表
+    def getDealerExecutive(self,headers):
+        path = "/dealer/admin/api/dealer/getDealerExecutive"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #提交dealer审核
+    def submitDealerInfo(self,resourceId,id,email,contactPerson,companyName,city,country,state,companyAddress,
+                            registrationNumber,phoneNumber,phonePrefix,corpSsm,corpCard,file,remarks,companyPic,
+                            picIDCard,marginPaid,marginFile,headers):
+        headers.update({'resourceId':resourceId})#更新headers，插入resourceId	
+        path = "/seller/admin/api/seller/submitCorpSellerInfo"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "email":email,
+            "contactPerson":contactPerson,
+            "companyName":companyName,
+            "city":city,
+            "country":country,
+            "state":state,
+            "companyAddress":companyAddress,
+            "registrationNumber":registrationNumber,
+            "phoneNumber":phoneNumber,
+            "phonePrefix":phonePrefix,
+            "corpSsm":[{"name":name,
+                        "photo": photo}],
+            "corpCard":[{"name":name,
+                        "photo": photo}],
+            "file":[{"name":name,
+                        "photo": photo}],
+            "remarks":remarks,
+            "companyPic":companyPic,
+            "picIDCard":[{"name":name,
+                        "photo": photo}],
+            "marginPaid":marginPaid,
+            "marginFile":[{"name":name,
+                        "photo": photo,
+                        "type":type}]
+        },headers=headers)
+        return res
+    #保存dealer修改信息
+    def saveEditInfoDealer(self,resourceId,id,email,contactPerson,companyName,city,country,state,companyAddress,
+                            registrationNumber,phoneNumber,phonePrefix,corpSsm,corpCard,file,remarks,companyPic,
+                            picIDCard,marginPaid,marginFile,headers):
+        headers.update({'resourceId':resourceId})#更新headers，插入resourceId	
+        path = "/dealer/admin/api/dealer/saveEditInfo"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "email":email,
+            "contactPerson":contactPerson,
+            "companyName":companyName,
+            "city":city,
+            "country":country,
+            "state":state,
+            "companyAddress":companyAddress,
+            "registrationNumber":registrationNumber,
+            "phoneNumber":phoneNumber,
+            "phonePrefix":phonePrefix,
+            "corpSsm":[{"name":name,
+                        "photo": photo}],
+            "corpCard":[{"name":name,
+                        "photo": photo}],
+            "file":[{"name":name,
+                        "photo": photo}],
+            "remarks":remarks,
+            "companyPic":companyPic,
+            "picIDCard":[{"name":name,
+                        "photo": photo}],
+            "marginPaid":marginPaid,
+            "marginFile":[{"name":name,
+                        "photo": photo,
+                        "type":type}]
+        },headers=headers)
+        return res
+    #审核通过Dealer
+    def auditSuccessDealer(self,resourceId,id,headers):
+        headers.update({'resourceId':resourceId})#更新headers，插入resourceId
+        path = "/dealer/admin/api/dealer/auditSuccess"
+        res = requests.post(self.url+path,json={
+            "id":id
+        },headers=headers)
+        return res
+    #审核失败Dealer
+    def auditFailDealer(self,resourceId,id,headers):
+        headers.update({'resourceId':resourceId})#更新headers，插入resourceId
+        path = "/dealer/admin/api/dealer/auditFail"
+        res = requests.post(self.url+path,json={
+            "id":id
+        },headers=headers)
+        return res
+    
