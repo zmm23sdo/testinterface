@@ -40,4 +40,5 @@ def tokenTrue():#激活token
 
 token = tokenTrue()
 headers = {'Authorization': 'Bearer '+token}
-    
+headers.update({'resourceId':resourceId})
+print(headers,"\n",headersnew)    
