@@ -6,282 +6,6 @@ class Interface:
     def __init__(self):
         self.url = "http://192.168.102.252:8081"
         """初始化host url"""
-    #获取验证码图片
-    def getVerifyCodeImage(self):
-        """获取验证码图片"""
-        path = "/user/admin/api/account/getVerifyCodeImage" 
-        res = requests.get(self.url+path)#拼接url
-        verifyCodeId=res.json()['data']['verifyCodeId']
-        return verifyCodeId
-    #登录
-    def login(self, username,password,verifyCodeId,verifyCode):
-        """登录"""
-        path = "/user/admin/api/account/login"
-        res = requests.post(self.url+path, json={
-            "username": username,
-            "password": password,
-            "verifyCodeId": verifyCodeId,
-            "verifyCode": verifyCode
-            }
-            )
-        return res
-    
-
-    '''【User用户管理模块2.0】'''
-    #创建用户组
-    def createGroup(self,title,roles,parentId,headers):
-        """创建用户组"""
-        path = "/user/admin/api/user/createGroup"
-        res = requests.post(self.url+path,json={
-            "title":title,
-            "roles": [],
-            "parentId":parentId
-        },headers=headers)
-        return res
-    #修改admin用户邮箱
-    def editUserEmail(self,id,email,headers):
-        """修改admin用户邮箱"""
-        path = "/user/admin/api/user/editUserEmail"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "email":email
-        },headers=headers)
-        return res
-    #修改admin用户姓名
-    def editUsername(self,id,name,headers):
-        """修改admin用户姓名"""
-        path = "/user/admin/api/user/editUsername"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "name":name
-        },headers=headers)
-        return res
-    #修改admin用户密码
-    def resetpassword(self,id,newPassword,setDisable,headers):
-        """修改admin用户密码"""
-        path = "/user/admin/api/user/resetpassword"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "newPassword":newPassword,
-            "setDisable	":setDisable
-        },headers=headers)
-        return res
-    #修改交易员姓名
-    def changeName(self,userId,name,headers):
-        """修改交易员姓名"""
-        path = "/user/admin/api/trader/changeName"
-        res = requests.post(self.url+path,json={
-            "userId":userId,
-            "name":name
-        },headers=headers)
-        return res
-    #新建检车员
-    def newChecker(self,username,password,name,email,headers):
-        """新建检车员"""
-        path = "/user/admin/api/checker/new"
-        res = requests.post(self.url+path,json={
-            "username":username	,
-            "password":password,
-            "name":name,
-            "email":email
-        },headers=headers)
-        return res
-    #绑定二步验证
-    def bindTFA(self,id,secret,code,headers):
-        path = "/user/admin/api/user/bindTFA"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "secret":secret,
-            "code":code
-        },headers=headers)
-        return res
-    #解除二步验证
-    def clearTFA(self,id,headers):
-        path = "/user/admin/api/user/clearTFA"
-        res = requests.post(self.url+path,json={
-            "id":id
-        },headers=headers)
-        return res
-    #获取二步验证二维码
-    def getQRBarcode(self,username,headers):
-        path = "/user/admin/api/user/getQRBarcode"
-        res = requests.get(self.url+path,params={"username":username},headers=headers)
-        return res
-    #验证邮箱是否可用User
-    def checkEmailUser(self,email,headers):
-        path = "/user/admin/api/user/checkEmail"
-        res = requests.post(self.url+path,json={
-            "email":email
-        },headers=headers)
-        return res
-    #查询检车员
-    def queryChecker(self,pageSize,current,headers):
-        path = "/user/admin/api/checker/query"
-        res = requests.get(self.url+path,params={
-            "pageSize":pageSize,
-            "current":current
-        },headers=headers)
-        return res
-    #检查用户名是否可用
-    def checkUsername(self,username,headers):
-        path = "/user/admin/api/user/checkUsername"
-        res = requests.post(self.url+path,json={
-            "username":username
-        },headers=headers)
-        return res
-    #重置检车员密码
-    def resetPassword(self,id,password,headers):
-        path = "/user/admin/api/checker/resetPassword"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "password":password
-        },headers=headers)
-        return res
-    #修改检车员邮箱
-    def changeEmailChecker(self,id,email,headers):
-        path = "/user/admin/api/checker/changeEmail"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "email":email
-        },headers=headers)
-        return res
-    #修改检车员姓名
-    def changeName(self,id,username,headers):
-        path = "/user/admin/api/checker/changeName"
-        res = requests.post(self.url+path,json={
-            "id":id,
-            "username":username
-        },headers=headers)
-        return res
-    #注销交易员
-    def logoff(self,userId,headers):
-        path = "/user/admin/api/trader/logoff"
-        res = requests.post(self.url+path,json={
-            "userId":userId
-        },headers=headers)
-        return res
-    #检验用户组内用户是否可以被删除
-    def checkGroupUser(self,id,headers):
-        path = "/user/admin/api/user/checkGroupUser"
-        res = requests.post(self.url+path,json={
-            "id	":id
-        },headers=headers)
-        return res
-    #检查admin用户是否可以被注销
-    def checkUser(self,id,headers):
-        path = "/user/admin/api/user/checkUser"
-        res = requests.post(self.url+path,json={
-            "id	":id
-        },headers=headers)
-        return res
-    #注销admin用户
-    def deleteUser(self,id,headers):
-        path = "/user/admin/api/user/deleteUser"
-        res = requests.post(self.url+path,json={
-            "id	":id
-        },headers=headers)
-        return res
-    #获取用户下级用户组用户信息
-    def getGroupUsers(self,userId,roles,headers):
-        path = "/user/admin/api/user/getGroupUsers"
-        res = requests.get(self.url+path,params={
-            "userId	":userId,
-            "roles":roles
-        },headers=headers)
-        return res
-    #编辑用户组信息
-    def editGroupInfo(self,groupId,title,roles,groupUsers,headers):
-        path = "/user/admin/api/user/editGroupInfo"
-        res = requests.post(self.url+path,json={
-            "groupId":groupId,
-            "title":title,
-
-        },headers=headers)
-        return res
-    #获取用户组角色列表
-    def getGroupRoles(self,id,headers):
-        path = "/user/admin/api/user/getGroupRoles/"
-        res = requests.get(self.url+path+id,headers=headers)
-        return res
-    #获取用户组信息
-    def getGroupInfo(self,id,headers):
-        path = "/user/admin/api/user/getGroupInfo/"
-        res = requests.get(self.url+path+id,headers=headers)
-        return res
-    #获取admin所有用户
-    def allUsers(self,pageSize,current,headers):
-        """获取admin所有用户"""
-        path = "/user/admin/api/user/getUserList"
-        res = requests.get(self.url+path,params={
-            "pageSize":pageSize,
-            "current":current
-        },headers=headers)
-        return res
-    #获取admin用户列表
-    def getUsers(self,headers):
-        """获取admin用户列表"""
-        path = "/user/admin/api/user/getUsers"
-        res = requests.get(self.url+path,headers=headers)
-        return res
-    #获取用户组树
-    def groupTree(self,headers):
-        path = "/user/admin/api/user/groupTree"
-        res = requests.get(self.url+path,headers=headers)
-        return res
-    #删除用户组
-    def deleteGroup(self,id,headers):
-        path = "/user/admin/api/user/deleteGroup"
-        res = requests.post(self.url+path,json={
-            "id":id
-        },headers=headers)
-        return res
-    #创建用户
-    def createUser(self,username,password,email,name,enabled,headers):
-        path = "/user/admin/api/user/createUser"
-        res = requests.post(self.url+path,json={
-            "username":username,
-            "password":password,
-            "email":email,
-            "name":name,
-            "enabled":enabled
-        },headers=headers)
-        return res
-    #重置密码
-    def resetPassword(self,username,newPassword,setDisable,headers):
-        path = "/user/admin/api/user/resetPassword"
-        res = requests.post(self.url+path,json={
-            "username":username,
-            "newPassword":newPassword,
-            "setDisable":setDisable
-        },headers=headers)
-        return res
-    #新建交易员
-    def newTrader(self,role,username,email,headers):
-        path = "/user/admin/api/trader/new"
-        res = requests.post(self.url+path,json={
-            "role":role,
-            "username":username,
-            "email":email
-        },headers=headers)
-        return res
-    #交易员查询
-    def queryTrader(self,pageSize,current,headers):
-        path = "/user/admin/api/trader/query"
-        res = requests.get(self.url+path,params={
-            "pageSize":pageSize,
-            "current":current
-        },headers=headers)
-        return res
-    #修改交易员邮箱
-    def changeEmailTrader(self,userId,email,headers):
-        path = "/admin/api/trader/changeEmail"
-        res = requests.post(self.url+path,json={
-            "userId":userId,
-            "email":email
-        },headers=headers)
-        return res
-    
-    
     '''【Seller 2.0】'''
     #新建corp seller
     def addCorpSeller(self,phoneNumber,phonePrefix,email,name,headers):
@@ -1090,14 +814,14 @@ class Interface:
             },headers=headers)
         return res
     #上传结果
-    def uploadResult(self,path,headers):
+    def uploadResult(self,photo,headers):
         path = "/inspector/admin/api/inspector/uploadResult"
         res = requests.post(self.url+path,json={
-            "path":path
+            "photo":photo
             },headers=headers)
         return res
     #取消关联
-    def disassociate(self,id,headers):
+    def disassociateInspector(self,id,headers):
         path = "/inspector/admin/api/inspector/uploadResult"
         res = requests.post(self.url+path,json={
             "id":id
@@ -1327,7 +1051,7 @@ class Interface:
     
     '''【车辆管理2.0】'''
     #获取车辆列表
-    def getCarList(self,headers):
+    def getCarListUser(self,headers):
         path = "/user/admin/api/user/userChangeHistory"
         res = requests.get(self.url+path,headers=headers)
         return res
@@ -1961,4 +1685,958 @@ class Interface:
 
 
     '''【仪表盘2.0】'''
+    #获取新增dealer
+    def getNewDealerCount(self,startTime,endTime,interval,headers):
+        path = "/dealer/admin/api/dealer/getNewDealerCount"
+        res = requests.get(self.url+path,params={
+            "startTime":startTime,
+            "endTime":endTime,
+            "interval":interval
+        },headers=headers)
+        return res
+    #获取dealer新增统计数据
+    def getNewDealerStatics(self,dayStart,dayEnd,weekStart,weekEnd,monthStart,monthEnd,lastWeekStart,
+                            lastWeekEnd,lastMonthStart,lastMonthEnd,headers):
+        path = "/dealer/admin/api/dealer/getNewDealerStatics"
+        res = requests.get(self.url+path,params={
+            "dayStart":dayStart,
+            "dayEnd":dayEnd,
+            "weekStart":weekStart,
+            "weekEnd":weekEnd,
+            "monthStart":monthStart,
+            "monthEnd":monthEnd,
+            "lastWeekStart":lastWeekStart,
+            "lastWeekEnd":lastWeekEnd,
+            "lastMonthStart":lastMonthStart,
+            "lastMonthEnd":lastMonthEnd
+        },headers=headers)
+        return res
+    #获取新增seller
+    def getNewSellerCount(self,startTime,endTime,interval,headers):
+        path = "/seller/admin/api/seller/getNewSellerCount"
+        res = requests.get(self.url+path,params={
+            "startTime":startTime,
+            "endTime":endTime,
+            "interval":interval
+        },headers=headers)
+        return res
+    #获取seller新增统计数据
+    def getNewSellerStatics(self,dayStart,dayEnd,weekStart,weekEnd,monthStart,monthEnd,lastWeekStart,
+                            lastWeekEnd,lastMonthStart,lastMonthEnd,headers):
+        path = "/seller/admin/api/seller/getNewSellerStatics"
+        res = requests.get(self.url+path,params={
+            "dayStart":dayStart,
+            "dayEnd":dayEnd,
+            "weekStart":weekStart,
+            "weekEnd":weekEnd,
+            "monthStart":monthStart,
+            "monthEnd":monthEnd,
+            "lastWeekStart":lastWeekStart,
+            "lastWeekEnd":lastWeekEnd,
+            "lastMonthStart":lastMonthStart,
+            "lastMonthEnd":lastMonthEnd
+        },headers=headers)
+        return res
+    #获取新增SalesAgent
+    def getNewSalesAgentCount(self,startTime,endTime,interval,headers):
+        path = "/sa/admin/api/sa/getNewSalesAgentCount"
+        res = requests.get(self.url+path,params={
+            "startTime":startTime,
+            "endTime":endTime,
+            "interval":interval
+        },headers=headers)
+        return res
+    #获取SalesAgent新增统计数据
+    def getNewSalesAgentStatics(self,dayStart,dayEnd,weekStart,weekEnd,monthStart,monthEnd,lastWeekStart,
+                            lastWeekEnd,lastMonthStart,lastMonthEnd,headers):
+        path = "/sa/admin/api/sa/getNewSalesAgentStatics"
+        res = requests.get(self.url+path,params={
+            "dayStart":dayStart,
+            "dayEnd":dayEnd,
+            "weekStart":weekStart,
+            "weekEnd":weekEnd,
+            "monthStart":monthStart,
+            "monthEnd":monthEnd,
+            "lastWeekStart":lastWeekStart,
+            "lastWeekEnd":lastWeekEnd,
+            "lastMonthStart":lastMonthStart,
+            "lastMonthEnd":lastMonthEnd
+        },headers=headers)
+        return res
+    #获取统计数据
+    def getStatics(self,headers):
+        path = "/inspector/admin/api/inspector/getStatics"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    
+
+    '''【通知2.0】'''
+    #清空
+    def setEmpty(self,tag,headers):
+        path = "/user/admin/api/account/setEmpty"
+        res = requests.get(self.url+path,params={
+            "tag":tag
+        },headers=headers)
+        return res
+    #sendNotification
+    def sendUserNotification(self,type,userId,data,headers):
+        path = "/user/admin/api/account/sendUserNotification"
+        res = requests.post(self.url+path,json={
+            "type":type,
+            "userId":userId,
+            "content": {
+                "data": data
+                }
+        },headers=headers)
+        return res
+    #获取通知列表
+    def getNotificationList(self,tag,headers):
+        path = "/user/admin/api/account/getNotificationList"
+        res = requests.get(self.url+path,params={
+            "tag":tag
+        },headers=headers)
+        return res
+    
+
+    '''【Seller Crm】'''
+    #seller手机号登录
+    def loginByPhoneSeller(self,phonePrefix,phoneNumber,password,headers):
+        path = "/seller/api/seller/loginByPhone"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "password":password
+        },headers=headers)
+        return res
+    #获取大厅车辆列表
+    def getCarListBidding(self,headers):
+        path = "/bidding/api/bidding/getCarList"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #获取车辆竞标详细信息
+    def getCarBiddingBlockInfo(self,carId,biddingBlockId,headers):
+        path = "/bidding/api/bidding/getCarBiddingBlockInfo"
+        res = requests.get(self.url+path,params={
+            "carId":carId,
+            "biddingBlockId":biddingBlockId
+        },headers=headers)
+        return res
+    #seller通过手机重置密码申请
+    def resetPasswordApplyByPhone(self,phonePrefix,phoneNumber,headers):
+        path = "/seller/api/seller/resetPasswordApplyByPhone"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber
+        },headers=headers)
+        return res
+    #seller通过邮箱重置密码申请
+    def resetPasswordApplyByEmail(self,email,headers):
+        path = "/seller/api/seller/resetPasswordApplyByEmail"
+        res = requests.post(self.url+path,json={
+            "email":email
+        },headers=headers)
+        return res
+    #seller邮箱登录
+    def loginByEmail(self,phonePrefix,phoneNumber,headers):
+        path = "/seller/api/seller/loginByEmail"
+        res = requests.post(self.url+path,json={
+            "email":email,
+            "password":password
+        },headers=headers)
+        return res
+    #seller重置密码验证
+    def resetPasswordVerifyByPhone(self,phonePrefix,phoneNumber,verifyCodeId,verifyCode,headers):
+        path = "/seller/api/seller/resetPasswordVerifyByPhone"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "verifyCodeId":verifyCodeId,
+            "verifyCode":verifyCode
+        },headers=headers)
+        return res
+    #seller通过手机重置密码
+    def resetPasswordByPhone(self,password,verifyCodeId,verifyCode,headers):
+        path = "/seller/api/seller/resetPasswordByPhone"
+        res = requests.post(self.url+path,json={
+            "password":password,
+            "verifyCodeId":verifyCodeId,
+            "verifyCode":verifyCode
+        },headers=headers)
+        return res
+    #seller通过邮箱重置密码
+    def resetPasswordByEmail(self,password,token,headers):
+        path = "/seller/api/seller/resetPasswordByEmail"
+        res = requests.post(self.url+path,json={
+            "password":password,
+            "token":token
+        },headers=headers)
+        return res
+    #seller修改密码
+    def changePasswordSeller(self,newPassword,token,headers):
+        path = "/seller/api/seller/changePassword"
+        res = requests.post(self.url+path,json={
+            "newPassword":newPassword,
+            "oldPassword":oldPassword
+        },headers=headers)
+        return res
+    #seller获取用户信息
+    def getSellerInfo(self,headers):
+        path = "/seller/api/seller/getSellerInfo"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #seller检查邮箱是否可用
+    def checkEmailSeller(self,email,headers):
+        path = "/seller/api/seller/checkEmail"
+        res = requests.post(self.url+path,json={
+            "email":email
+        },headers=headers)
+        return res
+    #seller登出
+    def logoutSeller(self,email,headers):
+        path = "/seller/api/seller/logout"
+        res = requests.post(self.url+path,headers=headers)
+        return res
+    #获取竞标历史列表
+    def getCarBiddingBlockHistory(self,headers):
+        path = "/bidding/api/bidding/getCarBiddingBlockHistory"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #获取车辆竞标历史详情
+    def getCarBiddingBlockHistoryInfo(self,carId,biddingBlockId,headers):
+        path = "/bidding/api/bidding/getCarBiddingBlockHistoryInfo"
+        res = requests.get(self.url+path,params={
+            "carId":carId,
+            "biddingBlockId":biddingBlockId
+        },headers=headers)
+        return res
+    #seller检查手机号是否可用
+    def checkPhoneNumber(self,phonePrefix,phoneNumber,headers):
+        path = "/seller/api/seller/checkPhoneNumber"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber
+        },headers=headers)
+        return res
+    #编辑中标意见
+    def editSellerComment(self,carId,biddingBlockId,comment,headers):
+        path = "/bidding/api/bidding/editSellerComment"
+        res = requests.post(self.url+path,json={
+            "carId":carId,
+            "biddingBlockId":biddingBlockId,
+            "comment":comment
+        },headers=headers)
+        return res
+    #seller修改用户信息
+    def editSellerInfo(self,carId,biddingBlockId,comment,headers):
+        path = "/bidding/api/bidding/editSellerComment"
+        res = requests.post(self.url+path,json={
+            "carId":carId,
+            "biddingBlockId":biddingBlockId,
+            "comment":comment
+        },headers=headers)
+        return res
+    
+
+    '''【SA App】'''
+    #登陆Sa
+    def loginSa(self,phonePrefix,phoneNumber,password,headers):
+        path = "/sa/api/sa/login"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "password":password
+        },headers=headers)
+        return res
+    #验证码登陆
+    def loginVerifyCode(self,phonePrefix,phoneNumber,verifyCodeId,verifyCode,headers):
+        path = "/sa/api/sa/loginVerifyCode"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "verifyCodeId":verifyCodeId,
+            "verifyCode":verifyCode
+        },headers=headers)
+        return res
+    #发送验证码
+    def sendVerifyCode(self,phonePrefix,phoneNumber,headers):
+        path = "/sa/api/sa/sendVerifyCode"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber
+        },headers=headers)
+        return res
+    #创建lead
+    def createLeadSa(self,carYear,carBrand,carModel,customerName,customerPhonePrefix,customerPhone,
+                    checkTime,checkDetailAddress,checkCity,checkRegion,checkPostcode,headers):
+        path = "/sa/api/sa/createLead"
+        res = requests.post(self.url+path,json={
+            "carYear":carYear,
+            "carBrand":carBrand,
+            "carModel":carModel,
+            "customerName":customerName,
+            "customerPhonePrefix":customerPhonePrefix,
+            "customerPhone":customerPhone,
+            "checkTime":checkTime,
+            "checkDetailAddress":checkDetailAddress,
+            "checkCity":checkCity,
+            "checkRegion":checkRegion,
+            "checkPostcode":checkPostcode
+        },headers=headers)
+        return res
+    #查询lead
+    def leadList(self,type,current,pageSize,headers):
+        path = "/sa/api/sa/leadList/"
+        res = requests.get(self.url+path+type,params={
+            "current":current,
+            "pageSize":pageSize
+        },headers=headers)
+        return res
+    #获取brand
+    def getAllCarBrand(self,headers):
+        path = "/sa/admin/api/sa/getAllCarBrand"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    
+
+    '''【SA Crm】'''
+    #登出Sa
+    def logoutSa(self,headers):
+        path = "/sa/api/sa/logout"
+        res = requests.post(self.url+path,headers=headers)
+        return res
+    #更换密码Sa
+    def changePasswordSa(self,oldPassword,newPassword,headers):
+        path = "/sa/api/sa/changePassword"
+        res = requests.post(self.url+path,json={
+            "oldPassword":oldPassword,
+            "newPassword":newPassword
+        },headers=headers)
+        return res
+    #通过手机重置密码Sa
+    def resetPasswordSa(self,password,verifyCodeId,verifyCode,email,headers):
+        path = "/sa/api/sa/resetPassword"
+        res = requests.post(self.url+path,json={
+            "password":password,
+            "verifyCodeId":verifyCodeId,
+            "verifyCode":verifyCode,
+            "email":email
+        },headers=headers)
+        return res
+    #重置密码验证Sa
+    def resetPasswordVerifySa(self,phonePrefix,phoneNumber,verifyCodeId,verifyCode,headers):
+        path = "/sa/api/sa/resetPasswordVerify"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "verifyCodeId":verifyCodeId,
+            "verifyCode":verifyCode
+        },headers=headers)
+        return res
+    #agent通过手机重置密码申请
+    def resetPasswordApplySa(self,phonePrefix,phoneNumber,headers):
+        path = "/sa/api/sa/resetPasswordApply"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber
+        },headers=headers)
+        return res
+    #agent通过邮箱重置密码申请
+    def resetPasswordApplyByEmailSa(self,email,headers):
+        path = "/sa/api/sa/resetPasswordApplyByEmail"
+        res = requests.post(self.url+path,json={
+            "email":email
+        },headers=headers)
+        return res
+    #agent手机号登录
+    def loginByPhoneSa(self,phonePrefix,phoneNumber,password,headers):
+        path = "/sa/api/sa/loginByPhone"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "password":password
+        },headers=headers)
+        return res
+    #agent邮箱登录
+    def loginByEmailSa(self,email,password,headers):
+        path = "/sa/api/sa/loginByEmail"
+        res = requests.post(self.url+path,json={
+            "email":email,
+            "password":password
+        },headers=headers)
+        return res
+    #agent通过邮箱重置密码
+    def resetPasswordByEmailSa(self,password,token,headers):
+        path = "/sa/api/sa/resetPasswordByEmail"
+        res = requests.post(self.url+path,json={
+            "password":password,
+            "token":token
+        },headers=headers)
+        return res
+    #agent获取用户信息
+    def getSalesAgentInfo(self,headers):
+        path = "/sa/api/sa/getSalesAgentInfo"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #agent检查邮箱是否可用
+    def checkEmailSa(self,email,headers):
+        path = "/sa/api/sa/checkEmail"
+        res = requests.post(self.url+path,json={
+            "email":email
+        },headers=headers)
+        return res
+    #agent检查手机号是否可用
+    def checkPhoneNumberSa(self,phonePrefix,phoneNumber,headers):
+        path = "/sa/api/sa/checkPhoneNumber"
+        res = requests.post(self.url+path,json={
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber
+        },headers=headers)
+        return res
+    #agent修改用户信息
+    def editSalesAgentInfo(self,email,name,headers):
+        path = "/sa/api/sa/editSalesAgentInfo"
+        res = requests.post(self.url+path,json={
+            "email":email,
+            "name":name
+        },headers=headers)
+        return res
+    
+
+    '''【Account账户管理2.0】'''
+    #loginUser
+    def loginUser(self,username,password,verifyCode,verifyCodeId,):
+        path = "/user/admin/api/account/login"
+        res = requests.post(self.url+path,json={
+            "username":username,
+            "password":password,
+            "verifyCode":verifyCode,
+            "verifyCodeId":verifyCodeId
+        })
+        return res
+    #logoutUser
+    def logoutUser(self,headers):
+        path = "/user/admin/api/account/logout"
+        res = requests.post(self.url+path,headers=headers)
+        return res
+    #获取所有车辆品牌
+    def getAllCarBrandUser(self,headers):
+        path = "/user/admin/api/account/getAllCarBrand"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #获取检车STS
+    def getCheckerSTS(self,photo,headers):
+        path = "/user/admin/api/account/getCheckerSTS"
+        res = requests.get(self.url+path,params={
+            "photo":photo
+        },headers=headers)
+        return res
+    #检车APP登录
+    def checkerLogin(self,username,password,verifyCode,verifyCodeId,headers):
+        path = "/user/admin/api/account/checkerLogin"
+        res = requests.post(self.url+path,json={
+            "username":username,
+            "password":password
+        },headers=headers)
+        return res
+    #获取用户信息
+    def getUserInfo(self,headers):
+        path = "/user/admin/api/account/getUserInfo"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #获取验证码图片
+    def getVerifyCodeImage(self):
+        """获取验证码图片"""
+        path = "/user/admin/api/account/getVerifyCodeImage" 
+        res = requests.get(self.url+path)#拼接url
+        verifyCodeId=res.json()['data']['verifyCodeId']
+        return verifyCodeId
+    #验证二步验证
+    def verifyTFA(self,code,headers):
+        path = "/user/admin/api/account/verifyTFA"
+        res = requests.post(self.url+path,json={
+            "code":code
+        },headers=headers)
+        return res
+    #修改密码
+    def changePasswordUser(self,newPassword,headers):
+        path = "/user/admin/api/account/changePassword"
+        res = requests.post(self.url+path,json={
+            "newPassword":newPassword
+        },headers=headers)
+        return res
+    #获取任务
+    def getTasks(self,headers):
+        path = "/user/admin/api/account/getTasks"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+
+
+    '''【Lead 2.0】'''
+    #admin新建lead
+    def newLead(self,carYear,carBrand,carModel,applyName,applyTel,applyTelCode,applyMail,checkTime,checkDetailAddress,
+                checkCity,checkRegion,checkPostcode,headers):
+        path = "/lead/admin/api/lead/new"
+        res = requests.post(self.url+path,json={
+            "carYear":carYear,
+            "carBrand":carBrand,
+            "carModel":carModel,
+            "applyName":applyName,
+            "applyTel":applyTel,
+            "applyTelCode":applyTelCode,
+            "applyMail":applyMail,
+            "checkTime":checkTime,
+            "checkDetailAddress":checkDetailAddress,
+            "checkCity":checkCity,
+            "checkRegion":checkRegion,
+            "checkPostcode":checkPostcode
+        },headers=headers)
+        return res
+    #查询等待预检的lead
+    def unchecked(self,current,pageSize,headers):
+        path = "/lead/admin/api/lead/query/unchecked"
+        res = requests.get(self.url+path,params={
+            "current":current,
+            "pageSize":pageSize
+        },headers=headers)
+        return res
+    #指派经办人(customer service)
+    def assignCustomerService(self,leadNo,assignId,headers):
+        path = "/lead/admin/api/lead/assignCustomerService"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo,
+            "assignId":assignId
+        },headers=headers)
+        return res
+    #获取lead详情
+    def infoLead(self,id,headers):
+        path = "/lead/admin/api/lead/info/"
+        res = requests.get(self.url+path+id,headers=headers)
+        return res
+    #关联seller
+    def associateSeller(self,leadNo,customerId,headers):
+        path = "/lead/admin/api/lead/associateSeller"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo,
+            "customerId":customerId
+        },headers=headers)
+        return res
+    #编辑lead基础信息
+    def editLead(self,carYear,carBrand,carType,carModel,applyName,applyTel,applyTelCode,applyMail,checkTime,
+                checkDetailAddress,checkPostcode,checkRegion,checkCity,leadNo,remark,headers):
+        path = "/lead/admin/api/lead/edit"
+        res = requests.post(self.url+path,json={
+            "carYear":carYear,
+            "carBrand":carBrand,
+            "carType":carType,
+            "carModel":carModel,
+            "applyName":applyName,
+            "applyTel":applyTel,
+            "applyTelCode":applyTelCode,
+            "applyMail":applyMail,
+            "checkTime":checkTime,
+            "checkDetailAddress":checkDetailAddress,
+            "checkPostcode":checkPostcode,
+            "checkRegion":checkRegion,
+            "checkCity":checkCity,
+            "leadNo":leadNo,
+            "remark":remark
+        },headers=headers)
+        return res
+    #终止lead
+    def finishLead(self,leadNo,comment,headers):
+        path = "/lead/admin/api/lead/finish"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo,
+            "comment":comment
+        },headers=headers)
+        return res
+    #查询完成的lead
+    def checkedLead(self,current,pageSize,headers):
+        path = "/lead/admin/api/lead/query/checked"
+        res = requests.get(self.url+path,json={
+            "current":current,
+            "pageSize":pageSize
+        },headers=headers)
+        return res
+    #编辑车辆户口
+    def changeCarCard(self,carType,cardUrl,leadNo,headers):
+        path = "/lead/admin/api/lead/changeCarCard"
+        res = requests.post(self.url+path,json={
+            "carType":carType,
+            "cardUrl":cardUrl,
+            "leadNo":leadNo
+        },headers=headers)
+        return res
+    #lead异常
+    def exception(self,leadNo,comment,headers):
+        path = "/lead/admin/api/lead/exception"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo,
+            "comment":comment
+        },headers=headers)
+        return res
+    #lead申请确认
+    def checkLead(self,leadNo,headers):
+        path = "/lead/admin/api/lead/check"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo
+        },headers=headers)
+        return res
+    #获取customerService成员
+    def customerServiceMembers(self,headers):
+        path = "/lead/admin/api/lead/customerServiceMembers"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #获取corporate成员
+    def corporateMembers(self,headers):
+        path = "/lead/admin/api/lead/corporateMembers"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #查询异常lead
+    def abnormal(self,carBrand,current,pageSize,search,carYear,createdTime,sorter,headers):
+        path = "/lead/admin/api/lead/query/abnormal"
+        res = requests.get(self.url+path,params={
+            "carBrand":carBrand,
+            "current":current,
+            "pageSize":pageSize,
+            "search":search,
+            "carYear":carYear,
+            "createdTime":createdTime,
+            "sorter":sorter
+        },headers=headers)
+        return res
+    #指派经办人（Corporate）
+    def assignCorporate(self,leadNo,assignId,headers):
+        path = "/lead/admin/api/lead/assignCorporate"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo,
+            "assignId":assignId
+        },headers=headers)
+        return res
+    #取消关联系统用户
+    def disassociateLead(self,leadNo,headers):
+        path = "/lead/admin/api/lead/disassociate"
+        res = requests.post(self.url+path,json={
+            "leadNo":leadNo
+        },headers=headers)
+        return res
+    #lead创建seller
+    def leadNewSeller(self,phoneNumber,phonePrefix,type,email,name,headers):
+        path = "/seller/admin/api/seller/leadNewSeller"
+        res = requests.post(self.url+path,params={
+            "phoneNumber":phoneNumber,
+            "phonePrefix":phonePrefix,
+            "type":type,
+            "email":email,
+            "name":name
+        },headers=headers)
+        return res
+    #lead创建agent
+    def leadNewSalesAgent(self,phoneNumber,name,phonePrefix,type,email,headers):
+        path = "/sa/admin/api/sa/leadNewSalesAgent"
+        res = requests.post(self.url+path,params={
+            "phoneNumber":phoneNumber,
+            "name":name,
+            "phonePrefix":phonePrefix,
+            "type":type,
+            "email":email
+        },headers=headers)
+        return res
+    #关联agent
+    def associateSalesAgent(self,leadNo,customerId,headers):
+        path = "/lead/admin/api/lead/associateSalesAgent"
+        res = requests.post(self.url+path,params={
+            "leadNo":leadNo,
+            "customerId":customerId
+        },headers=headers)
+        return res
+    #主页获取验证码
+    def sendVerifyCodeLead(self,phoneNumber,phonePrefix,headers):
+        path = "/lead/api/sendVerifyCode"
+        res = requests.post(self.url+path,params={
+            "phoneNumber":phoneNumber,
+            "phonePrefix":phonePrefix
+        },headers=headers)
+        return res
+    #主页创建订单
+    def createLeadLead(self,carYear,carBrand,carType,carModel,applyName,phonePrefix,phoneNumber,
+                        remark,checkTime,checkDetailAddress,checkCity,checkRegion,checkPostcode,verifyCode,headers):
+        path = "/lead/api/createLead"
+        res = requests.post(self.url+path,json={
+            "carYear":carYear,
+            "carBrand":carBrand,
+            "carType":carType,
+            "carModel":carModel,
+            "applyName":applyName,
+            "phonePrefix":phonePrefix,
+            "phoneNumber":phoneNumber,
+            "remark":remark,
+            "checkTime":checkTime,
+            "checkDetailAddress":checkDetailAddress,
+            "checkCity":checkCity,
+            "checkRegion":checkRegion,
+            "checkPostcode":checkPostcode,
+            "verifyCode":verifyCode
+        },headers=headers)
+        return res
+    #获取车牌信息
+    def carBrands(self,headers):
+        path = "/lead/api/carBrands"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    
+
+    '''【User用户管理模块2.0】'''
+    #创建用户组
+    def createGroup(self,title,roles,parentId,headers):
+        """创建用户组"""
+        path = "/user/admin/api/user/createGroup"
+        res = requests.post(self.url+path,json={
+            "title":title,
+            "roles": [],
+            "parentId":parentId
+        },headers=headers)
+        return res
+    #修改admin用户邮箱
+    def editUserEmail(self,id,email,headers):
+        """修改admin用户邮箱"""
+        path = "/user/admin/api/user/editUserEmail"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "email":email
+        },headers=headers)
+        return res
+    #修改admin用户姓名
+    def editUsername(self,id,name,headers):
+        """修改admin用户姓名"""
+        path = "/user/admin/api/user/editUsername"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "name":name
+        },headers=headers)
+        return res
+    #修改admin用户密码
+    def resetpassword(self,id,newPassword,setDisable,headers):
+        """修改admin用户密码"""
+        path = "/user/admin/api/user/resetpassword"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "newPassword":newPassword,
+            "setDisable	":setDisable
+        },headers=headers)
+        return res
+    #修改交易员姓名
+    def changeName(self,userId,name,headers):
+        """修改交易员姓名"""
+        path = "/user/admin/api/trader/changeName"
+        res = requests.post(self.url+path,json={
+            "userId":userId,
+            "name":name
+        },headers=headers)
+        return res
+    #新建检车员
+    def newChecker(self,username,password,name,email,headers):
+        """新建检车员"""
+        path = "/user/admin/api/checker/new"
+        res = requests.post(self.url+path,json={
+            "username":username	,
+            "password":password,
+            "name":name,
+            "email":email
+        },headers=headers)
+        return res
+    #绑定二步验证
+    def bindTFA(self,id,secret,code,headers):
+        path = "/user/admin/api/user/bindTFA"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "secret":secret,
+            "code":code
+        },headers=headers)
+        return res
+    #解除二步验证
+    def clearTFA(self,id,headers):
+        path = "/user/admin/api/user/clearTFA"
+        res = requests.post(self.url+path,json={
+            "id":id
+        },headers=headers)
+        return res
+    #获取二步验证二维码
+    def getQRBarcode(self,username,headers):
+        path = "/user/admin/api/user/getQRBarcode"
+        res = requests.get(self.url+path,params={"username":username},headers=headers)
+        return res
+    #验证邮箱是否可用User
+    def checkEmailUser(self,email,headers):
+        path = "/user/admin/api/user/checkEmail"
+        res = requests.post(self.url+path,json={
+            "email":email
+        },headers=headers)
+        return res
+    #查询检车员
+    def queryChecker(self,pageSize,current,headers):
+        path = "/user/admin/api/checker/query"
+        res = requests.get(self.url+path,params={
+            "pageSize":pageSize,
+            "current":current
+        },headers=headers)
+        return res
+    #检查用户名是否可用
+    def checkUsername(self,username,headers):
+        path = "/user/admin/api/user/checkUsername"
+        res = requests.post(self.url+path,json={
+            "username":username
+        },headers=headers)
+        return res
+    #重置检车员密码
+    def resetPassword(self,id,password,headers):
+        path = "/user/admin/api/checker/resetPassword"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "password":password
+        },headers=headers)
+        return res
+    #修改检车员邮箱
+    def changeEmailChecker(self,id,email,headers):
+        path = "/user/admin/api/checker/changeEmail"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "email":email
+        },headers=headers)
+        return res
+    #修改检车员姓名
+    def changeName(self,id,username,headers):
+        path = "/user/admin/api/checker/changeName"
+        res = requests.post(self.url+path,json={
+            "id":id,
+            "username":username
+        },headers=headers)
+        return res
+    #注销交易员
+    def logoff(self,userId,headers):
+        path = "/user/admin/api/trader/logoff"
+        res = requests.post(self.url+path,json={
+            "userId":userId
+        },headers=headers)
+        return res
+    #检验用户组内用户是否可以被删除
+    def checkGroupUser(self,id,headers):
+        path = "/user/admin/api/user/checkGroupUser"
+        res = requests.post(self.url+path,json={
+            "id	":id
+        },headers=headers)
+        return res
+    #检查admin用户是否可以被注销
+    def checkUser(self,id,headers):
+        path = "/user/admin/api/user/checkUser"
+        res = requests.post(self.url+path,json={
+            "id	":id
+        },headers=headers)
+        return res
+    #注销admin用户
+    def deleteUser(self,id,headers):
+        path = "/user/admin/api/user/deleteUser"
+        res = requests.post(self.url+path,json={
+            "id	":id
+        },headers=headers)
+        return res
+    #获取用户下级用户组用户信息
+    def getGroupUsers(self,userId,roles,headers):
+        path = "/user/admin/api/user/getGroupUsers"
+        res = requests.get(self.url+path,params={
+            "userId	":userId,
+            "roles":roles
+        },headers=headers)
+        return res
+    #编辑用户组信息
+    def editGroupInfo(self,groupId,title,roles,groupUsers,headers):
+        path = "/user/admin/api/user/editGroupInfo"
+        res = requests.post(self.url+path,json={
+            "groupId":groupId,
+            "title":title,
+
+        },headers=headers)
+        return res
+    #获取用户组角色列表
+    def getGroupRoles(self,id,headers):
+        path = "/user/admin/api/user/getGroupRoles/"
+        res = requests.get(self.url+path+id,headers=headers)
+        return res
+    #获取用户组信息
+    def getGroupInfo(self,id,headers):
+        path = "/user/admin/api/user/getGroupInfo/"
+        res = requests.get(self.url+path+id,headers=headers)
+        return res
+    #获取admin所有用户
+    def allUsers(self,pageSize,current,headers):
+        """获取admin所有用户"""
+        path = "/user/admin/api/user/getUserList"
+        res = requests.get(self.url+path,params={
+            "pageSize":pageSize,
+            "current":current
+        },headers=headers)
+        return res
+    #获取admin用户列表
+    def getUsers(self,headers):
+        """获取admin用户列表"""
+        path = "/user/admin/api/user/getUsers"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #获取用户组树
+    def groupTree(self,headers):
+        path = "/user/admin/api/user/groupTree"
+        res = requests.get(self.url+path,headers=headers)
+        return res
+    #删除用户组
+    def deleteGroup(self,id,headers):
+        path = "/user/admin/api/user/deleteGroup"
+        res = requests.post(self.url+path,json={
+            "id":id
+        },headers=headers)
+        return res
+    #创建用户
+    def createUser(self,username,password,email,name,enabled,headers):
+        path = "/user/admin/api/user/createUser"
+        res = requests.post(self.url+path,json={
+            "username":username,
+            "password":password,
+            "email":email,
+            "name":name,
+            "enabled":enabled
+        },headers=headers)
+        return res
+    #重置密码
+    def resetPassword(self,username,newPassword,setDisable,headers):
+        path = "/user/admin/api/user/resetPassword"
+        res = requests.post(self.url+path,json={
+            "username":username,
+            "newPassword":newPassword,
+            "setDisable":setDisable
+        },headers=headers)
+        return res
+    #新建交易员
+    def newTrader(self,role,username,email,headers):
+        path = "/user/admin/api/trader/new"
+        res = requests.post(self.url+path,json={
+            "role":role,
+            "username":username,
+            "email":email
+        },headers=headers)
+        return res
+    #交易员查询
+    def queryTrader(self,pageSize,current,headers):
+        path = "/user/admin/api/trader/query"
+        res = requests.get(self.url+path,params={
+            "pageSize":pageSize,
+            "current":current
+        },headers=headers)
+        return res
+    #修改交易员邮箱
+    def changeEmailTrader(self,userId,email,headers):
+        path = "/admin/api/trader/changeEmail"
+        res = requests.post(self.url+path,json={
+            "userId":userId,
+            "email":email
+        },headers=headers)
+        return res
     

@@ -22,7 +22,7 @@ def getRedis():#获取验证码从Redis
 
 def loginTrue():#登录正则提交
     code,verify = getRedis()#取出验证码id和验证码  
-    Response = inter.login("mingvtest1","qwer`123",code,verify)
+    Response = inter.loginUser("mingvtest1","qwer`123",code,verify)
     print("^^^^^^^",Response.json())
     token = Response.json()['token']
     print("token:",Response.json()['token'])
@@ -38,6 +38,7 @@ def tokenTrue():#激活token
     print("Token:",token)
     return token
 
+#拼接含有token的headers
 token = tokenTrue()
 headers = {'Authorization': 'Bearer '+token}
 headers.update({'resourceId':resourceId})
