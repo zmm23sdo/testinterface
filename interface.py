@@ -2104,13 +2104,13 @@ class Interface:
 
     '''【Account账户管理2.0】'''
     #loginUser
-    def loginUser(self,username,password,verifyCode,verifyCodeId,):
+    def loginUser(self,username,password,verifyCodeId,verifyCode,):
         path = "/user/admin/api/account/login"
         res = requests.post(self.url+path,json={
             "username":username,
             "password":password,
-            "verifyCode":verifyCode,
-            "verifyCodeId":verifyCodeId
+            "verifyCodeId":verifyCodeId,
+            "verifyCode":verifyCode
         })
         return res
     #logoutUser

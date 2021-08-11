@@ -49,11 +49,10 @@ def test_loginVerifyIdError():#验证码ID错误提交
 
 def test_loginTrue():#登录正则提交
     code,verify = getRedis()#取出验证码id和验证码
-    # print("*"*10,code)
-    # print("*"*10,verify)
+    print("*"*10,code)
+    print("*"*10,verify)
     Response = inter.loginUser("mingvtest1","qwer`123",code,verify)
-    print()
     print("^^^^^^^",Response.json())
     print( type(Response.json()['success']) )
     # assert Response.json()['success']
-    #assert Response.json()['success'] == True
+    assert Response.json()['success'] == True
