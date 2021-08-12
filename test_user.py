@@ -32,8 +32,8 @@ def loginTrue():#登录正则提交
     return token
 
 
-#拼接含有token的headers
-token = redis.activateToken(loginTrue())
+
+token = redis.activateToken(loginTrue())#激活token
 # print("激活后的token:",token)
 # headers = {'Authorization': 'Bearer '+token}
 #headers.update({'resourceId':resourceId})#接口headers需要resourceId
@@ -43,7 +43,7 @@ token = redis.activateToken(loginTrue())
 #创建新用户，最后用新用户登录
 Random = str(random.randint(0,100))#随机数
 #1、创建一个superadmin的用户组
-headers = {'Authorization': 'Bearer '+token}
+headers = {'Authorization': 'Bearer '+token}#拼接含有token的headers
 roles = inter.getGroupRoles(id="1",headers=headers)#获取用户组角色列表，id默认1
 role_names = list(map(lambda x:x['name'],roles.json()['data']))
 # print(role_names)
