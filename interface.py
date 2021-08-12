@@ -629,7 +629,7 @@ class Interface:
         return res
     #保存editInfo
     def saveEditInfoSa(self,resourceId,id,email,name,companyName,city,country,state,companyAddress,
-                            registrationNumber,phoneNumber,phonePrefix,corpCardname,corpCardphoto,
+                            registrationNumber,phoneNumber,phonePrefix,corpSsmname,corpSsmphoto,corpCardname,corpCardphoto,
                             corpDocname,corpDocphoto,remarks,postcode,headers):
         headers.update({'resourceId':resourceId})#更新headers，插入resourceId
         path = "/sa/admin/api/sa/saveEditInfo"
@@ -658,7 +658,7 @@ class Interface:
         },headers=headers)
         return res
     #sa check email Sa
-    def checkEmailSa(self,email):
+    def checkEmailSa(self,email,headers):
         path = "/sa/admin/api/sa/checkEmail"
         res = requests.post(self.url+path,json={
             "email":email
@@ -2393,9 +2393,15 @@ class Interface:
         path = "/user/admin/api/user/createGroup"
         res = requests.post(self.url+path,json={
             "title":title,
-            "roles": [],
+            "roles":roles,
             "parentId":parentId
         },headers=headers)
+        # print("打印传参：",
+        # {
+        #     "title":title,
+        #     "roles": [],
+        #     "parentId":parentId
+        # },headers)
         return res
     #修改admin用户邮箱
     def editUserEmail(self,id,email,headers):
@@ -2554,6 +2560,8 @@ class Interface:
         res = requests.post(self.url+path,json={
             "groupId":groupId,
             "title":title,
+            "roles":roles,
+            "groupUsers":groupUsers
 
         },headers=headers)
         return res
@@ -2565,6 +2573,7 @@ class Interface:
     #获取用户组信息
     def getGroupInfo(self,id,headers):
         path = "/user/admin/api/user/getGroupInfo/"
+        # print("id:",id)#打印参数
         res = requests.get(self.url+path+id,headers=headers)
         return res
     #获取admin所有用户
