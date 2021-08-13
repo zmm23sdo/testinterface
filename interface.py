@@ -55,7 +55,8 @@ class Interface:
         res = requests.get(self.url+path+id,headers=headers)
         return res
     #指定经办人
-    def assignSeller(self,id,assignId,headers):
+    def assignSeller(self,id,assignId,resourceId,headers):
+        headers.update({'resourceId':resourceId})#更新headers，插入resourceId	
         path = "/seller/admin/api/seller/assignSeller"
         res = requests.post(self.url+path,json={
             "id":id,
@@ -117,7 +118,9 @@ class Interface:
         return res
     #提交公司seller审核
     def submitCorpSellerInfo(self,id,email,name,companyName,city,country,state,companyAddress,
-                            registrationNumber,phoneNumber,phonePrefix,corpSsmname,corpSsmphoto,corpCardname,corpCardphoto,corpDocname,corpDocphoto,remarks,headers):
+                            registrationNumber,phoneNumber,phonePrefix,corpSsmname,corpSsmphoto,
+                            corpCardname,corpCardphoto,corpDocname,corpDocphoto,remarks,postcode,resourceId,headers):
+        headers.update({'resourceId':resourceId})
         path = "/seller/admin/api/seller/submitCorpSellerInfo"
         res = requests.post(self.url+path,json={
             "id":id,
@@ -137,7 +140,8 @@ class Interface:
                         "photo":corpCardphoto}],
             "corpDoc":[{"name":corpDocname,
                         "photo":corpDocphoto}],
-            "remarks":remarks
+            "remarks":remarks,
+            "postcode":postcode
         },headers=headers)
         return res
     #提交个人seller信息修改
@@ -175,14 +179,15 @@ class Interface:
         path = "/seller/admin/api/seller/auditRevise"
         res = requests.post(self.url+path,json={
             "id":id,
-            "comment":comment
-        },headers=headers)
+            "comment": comment
+        },headers = headers)
         return res
     #上传图片成功
     def uploadResultSeller(self,photo,headers):
-        path = "/selle/admin/api/seller/uploadResult"
-        res = requests.post(self.url+path,json={
-            "photo": photo
+        path = "/seller/admin/api/seller/uploadResult"
+        # print(photo,headers)
+        res = requests.post(self.url+path,data={
+            "path": photo
         },headers=headers)
         return res
     #查询获取可查看审核人
@@ -814,7 +819,7 @@ class Interface:
             },headers=headers)
         return res
     #上传结果
-    def uploadResult(self,photo,headers):
+    def uploadResultInspector(self,photo,headers):
         path = "/inspector/admin/api/inspector/uploadResult"
         res = requests.post(self.url+path,json={
             "photo":photo
@@ -822,7 +827,7 @@ class Interface:
         return res
     #取消关联
     def disassociateInspector(self,id,headers):
-        path = "/inspector/admin/api/inspector/uploadResult"
+        path = "/inspector/admin/api/inspector/disassociate"
         res = requests.post(self.url+path,json={
             "id":id
             },headers=headers)
@@ -1837,7 +1842,7 @@ class Interface:
         },headers=headers)
         return res
     #seller邮箱登录
-    def loginByEmail(self,phonePrefix,phoneNumber,headers):
+    def loginByEmail(self,email,password,headers):
         path = "/seller/api/seller/loginByEmail"
         res = requests.post(self.url+path,json={
             "email":email,
@@ -1872,7 +1877,7 @@ class Interface:
         },headers=headers)
         return res
     #seller修改密码
-    def changePasswordSeller(self,newPassword,token,headers):
+    def changePasswordSeller(self,newPassword,oldPassword,headers):
         path = "/seller/api/seller/changePassword"
         res = requests.post(self.url+path,json={
             "newPassword":newPassword,
