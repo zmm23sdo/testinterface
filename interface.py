@@ -224,7 +224,7 @@ class Interface:
     def uploadResultDealer(self,photo,headers):
         path = "/dealer/admin/api/dealer/uploadResult"
         res = requests.post(self.url+path,json={
-            "photo": photo
+            "path": photo
         },headers=headers)
         return res
     #获取可选经办人列表
@@ -534,7 +534,7 @@ class Interface:
         },headers=headers)
         return res
     #查看salesAgent信息
-    def salesAgentInfo(self,resourceId,id,pageSize,current,headers):
+    def salesAgentInfo(self,resourceId,id,headers):
         headers.update({'resourceId':resourceId})#更新headers，插入resourceId
         path = "/sa/admin/api/sa/salesAgentInfo/"
         res = requests.get(self.url+path+id,headers=headers)
@@ -592,7 +592,7 @@ class Interface:
     def auditSuccessSa(self,resourceId,id,headers):
         headers.update({'resourceId':resourceId})#更新headers，插入resourceId
         path = "/sa/admin/api/sa/auditSuccess"
-        res = requests.post(self.url+path,params={
+        res = requests.post(self.url+path,json={
             "id":id
         },headers=headers)
         return res
@@ -667,6 +667,13 @@ class Interface:
         path = "/sa/admin/api/sa/checkEmail"
         res = requests.post(self.url+path,json={
             "email":email
+        },headers=headers)
+        return res
+    #上传图片成功Sa
+    def uploadResultSa(self,photo,headers):
+        path = "/sa/admin/api/sa/uploadResult"
+        res = requests.post(self.url+path,data={
+            "path": photo
         },headers=headers)
         return res
     
