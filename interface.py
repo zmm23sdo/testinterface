@@ -6,6 +6,8 @@ class Interface:
     def __init__(self):
         self.url = "http://192.168.102.252:8081"
         """初始化host url"""
+    
+    
     '''【Seller 2.0】'''
     #新建corp seller
     def addCorpSeller(self,phoneNumber,phonePrefix,email,name,headers):
@@ -213,22 +215,19 @@ class Interface:
 
     '''【Dealer2.0】'''
     #获取dealer列表
-    def getDealerList(self,createdBy,createdTime,headers):
+    def getDealerList(self,headers):
         path = "/dealer/admin/api/dealer/getDealerList"
-        res = requests.get(self.url+path,params={
-            "createdBy":createdBy,
-            "createdTime":createdTime
-        },headers=headers)
+        res = requests.get(self.url+path,headers=headers)
         return res
     #文件上传结果
     def uploadResultDealer(self,photo,headers):
         path = "/dealer/admin/api/dealer/uploadResult"
-        res = requests.post(self.url+path,json={
+        res = requests.post(self.url+path,data={
             "path": photo
         },headers=headers)
         return res
     #获取可选经办人列表
-    def getDealerExecutive(self,resourceId,id,headers):
+    def getDealerExecutiveId(self,resourceId,id,headers):
         headers.update({'resourceId':resourceId})
         path = "/dealer/admin/api/dealer/getDealerExecutive/"
         res = requests.get(self.url+path+id,headers=headers)
@@ -240,10 +239,10 @@ class Interface:
         return res
     #提交dealer审核
     def submitDealerInfo(self,resourceId,id,email,contactPerson,companyName,city,country,state,companyAddress,
-                            registrationNumber,phoneNumber,phonePrefix,corpSsmname,corpSsphoto,corpCardname,corpCardphoto,filename,filephoto,remarks,companyPic,
-                            picIDCardname,picIDCardphoto,marginPaid,marginFilename,marginFilephoto,headers):
+                            registrationNumber,phoneNumber,phonePrefix,corpSsmname,corpSsmphoto,corpCardname,corpCardphoto,filename,filephoto,remarks,companyPic,
+                            picIDCardname,picIDCardphoto,marginPaid,marginFilename,marginFilephoto,type,postcode,headers):
         headers.update({'resourceId':resourceId})#更新headers，插入resourceId	
-        path = "/seller/admin/api/seller/submitCorpSellerInfo"
+        path = "/dealer/admin/api/dealer/submitDealerInfo"
         res = requests.post(self.url+path,json={
             "id":id,
             "email":email,
@@ -257,7 +256,7 @@ class Interface:
             "phoneNumber":phoneNumber,
             "phonePrefix":phonePrefix,
             "corpSsm":[{"name":corpSsmname,
-                        "photo": corpSsphoto}],
+                        "photo": corpSsmphoto}],
             "corpCard":[{"name":corpCardname,
                         "photo":corpCardphoto}],
             "file":[{"name":filename,
@@ -269,7 +268,8 @@ class Interface:
             "marginPaid":marginPaid,
             "marginFile":[{"name":marginFilename,
                         "photo":marginFilephoto,
-                        "type":type}]
+                        "type":type}],
+            "postcode":postcode
         },headers=headers)
         return res
     #保存dealer修改信息
@@ -313,6 +313,7 @@ class Interface:
         res = requests.post(self.url+path,json={
             "id":id
         },headers=headers)
+        print("id=",id,"\nreresourceId=",resourceId)
         return res
     #审核失败Dealer
     def auditFailDealer(self,resourceId,id,headers):
@@ -388,7 +389,7 @@ class Interface:
     def getDealerInfo(self,resourceId,id,headers):
         headers.update({'resourceId':resourceId})#更新headers，插入resourceId
         path = "/dealer/admin/api/dealer/getDealerInfo/"
-        res = requests.post(self.url+path+id,headers=headers)
+        res = requests.get(self.url+path+id,headers=headers)
         return res
     #注销dealer
     def closeDealer(self,resourceId,id,comment,headers):
@@ -447,11 +448,13 @@ class Interface:
     #分配dealer
     def assignDealer(self,resourceId,id,assignId,headers):
         headers.update({'resourceId':resourceId})#更新headers，插入resourceId
-        path = "/dealer/admin/api/dealer/getSubsidiaryDealer"
+        path = "/dealer/admin/api/dealer/assignDealer"
         res = requests.post(self.url+path,json={
             "id":id,
             "assignId":assignId
         },headers=headers)
+        # print("id",id,"resourceId",resourceId,
+        #     "assignId",assignId)
         return res
     
 
