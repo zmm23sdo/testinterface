@@ -52,7 +52,7 @@ class Interface:
         },headers=headers)
         return res
     #获取可选经办人列表
-    def getSellerExecutive(self,id,headers):
+    def getSellerExecutiveId(self,id,headers):
         path = "/seller/admin/api/seller/getSellerExecutive/"
         res = requests.get(self.url+path+id,headers=headers)
         return res
@@ -757,7 +757,7 @@ class Interface:
         },headers=headers)
         return res
     #关联seller
-    def associateSeller(self,id,customerId,headers):
+    def associateSellerInspector(self,id,customerId,headers):
         path = "/inspector/admin/api/inspector/associateSeller"
         res = requests.post(self.url+path,json={
             "id":id,
@@ -2188,12 +2188,26 @@ class Interface:
 
     '''【Lead 2.0】'''
     #admin新建lead
-    def newLead(self,carYear,carBrand,carModel,applyName,applyTel,applyTelCode,applyMail,checkTime,checkDetailAddress,
+    def newLead(self,carYear,carBrand,carType,carModel,applyName,applyTel,applyTelCode,applyMail,checkTime,checkDetailAddress,
                 checkCity,checkRegion,checkPostcode,headers):
         path = "/lead/admin/api/lead/new"
+        # print("carYear",carYear,
+        #     "carBrand",carBrand,
+        #     "carType",carType,
+        #     "carModel",carModel,
+        #     "applyName",applyName,
+        #     "applyTel",applyTel,
+        #     "applyTelCode",applyTelCode,
+        #     "applyMail",applyMail,
+        #     "checkTime",checkTime,
+        #     "checkDetailAddress",checkDetailAddress,
+        #     "checkCity",checkCity,
+        #     "checkRegion",checkRegion,
+        #     "checkPostcode",checkPostcode)
         res = requests.post(self.url+path,json={
             "carYear":carYear,
             "carBrand":carBrand,
+            "carType":carType,
             "carModel":carModel,
             "applyName":applyName,
             "applyTel":applyTel,
@@ -2205,6 +2219,7 @@ class Interface:
             "checkRegion":checkRegion,
             "checkPostcode":checkPostcode
         },headers=headers)
+        
         return res
     #查询等待预检的lead
     def unchecked(self,current,pageSize,headers):
@@ -2228,7 +2243,7 @@ class Interface:
         res = requests.get(self.url+path+id,headers=headers)
         return res
     #关联seller
-    def associateSeller(self,leadNo,customerId,headers):
+    def associateSellerLead(self,leadNo,customerId,headers):
         path = "/lead/admin/api/lead/associateSeller"
         res = requests.post(self.url+path,json={
             "leadNo":leadNo,
@@ -2321,7 +2336,8 @@ class Interface:
         },headers=headers)
         return res
     #指派经办人（Corporate）
-    def assignCorporate(self,leadNo,assignId,headers):
+    def assignCorporate(self,leadNo,assignId,resourceId,headers):
+        headers.update({'resourceId':resourceId})#更新headers，插入resourceId	
         path = "/lead/admin/api/lead/assignCorporate"
         res = requests.post(self.url+path,json={
             "leadNo":leadNo,
@@ -2338,7 +2354,7 @@ class Interface:
     #lead创建seller
     def leadNewSeller(self,phoneNumber,phonePrefix,type,email,name,headers):
         path = "/seller/admin/api/seller/leadNewSeller"
-        res = requests.post(self.url+path,params={
+        res = requests.post(self.url+path,json={
             "phoneNumber":phoneNumber,
             "phonePrefix":phonePrefix,
             "type":type,
