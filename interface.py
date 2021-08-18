@@ -686,7 +686,7 @@ class Interface:
     def createInspection(self,carYear,carBrand,carModel,applyTel,applyTelCode,applyName,applyMail,carType,cardUrl,headers):
         path = "/inspector/admin/api/inspector/createInspection"
         res = requests.post(self.url+path,json={
-            "carYear":carYear,
+            "carYear":"1992",
             "carBrand":carBrand,
             "carModel":carModel,
             "applyTel":applyTel,
@@ -1179,7 +1179,7 @@ class Interface:
         res = requests.get(self.url+path+id,headers=headers)
         return res
     #触发检车
-    def createInspection(self,number,headers):
+    def createInspectionNumber(self,number,headers):
         path = "/inspector/admin/api/car/createInspection"
         res = requests.post(self.url+path,json={
             "number":number
@@ -2146,12 +2146,12 @@ class Interface:
         },headers=headers)
         return res
     #检车APP登录
-    def checkerLogin(self,username,password,verifyCode,verifyCodeId,headers):
+    def checkerLogin(self,username,password):
         path = "/user/admin/api/account/checkerLogin"
         res = requests.post(self.url+path,json={
             "username":username,
             "password":password
-        },headers=headers)
+        })
         return res
     #获取用户信息
     def getUserInfo(self,headers):
@@ -2474,13 +2474,15 @@ class Interface:
     #新建检车员
     def newChecker(self,username,password,name,email,headers):
         """新建检车员"""
+        # print(username,password,name,email,headers)
         path = "/user/admin/api/checker/new"
         res = requests.post(self.url+path,json={
-            "username":username	,
+            "username":username,
             "password":password,
             "name":name,
             "email":email
         },headers=headers)
+        # print(username,password,name,email,headers)
         return res
     #绑定二步验证
     def bindTFA(self,id,secret,code,headers):
