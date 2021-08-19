@@ -789,11 +789,10 @@ class Interface:
             },headers=headers)
         return res
     #审核详情
-    def auditInspectionInfo(self,current,pageSize,headers):
-        path = "/inspector/admin/api/inspector/queryFinishedInspection"
+    def auditInspectionInfo(self,id,headers):
+        path = "/inspector/admin/api/inspector/auditInspectionInfo"
         res = requests.get(self.url+path,params={
-            "current":current,
-            "pageSize":pageSize
+            "id":id
             },headers=headers)
         return res
     #已完成检车单详情
@@ -881,22 +880,35 @@ class Interface:
         },headers=headers)
         return res
     #编辑车辆损伤信息Inspector
-    def editCarDamageInfoInspector(self,position,photo,photos,headers):
+    def editCarDamageInfoInspector(self,id,position1,photos1,position2,photos2,position3,photos3,position4,photos4,headers):
         path = "/inspector/api/inspector/editCarDamageInfo/"
         res = requests.post(self.url+path,json={
-            "id	":id,
-            "damagePhoto":{"name":{
-                            "position":position,
-                            "photo":photo,
-                            "photos":photos
-                            },}
-        },headers=headers)
+            "id":id,
+            "damageInfo":{"Engine Acceleration":[
+                            {
+                            "position":position1,
+                            "photos":photos1
+                            },
+                            {
+                            "position":position2,
+                            "photos":photos2
+                            },
+                            {
+                            "position":position3,
+                            "photos":photos3
+                            },
+                            {
+                            "position":position4,
+                            "photos":photos4
+                            }]
+        }},
+        headers=headers)
         return res
     #提交检车任务
     def submitCheckerTask(self,id,expectPrice,inspectorDecision,remarks,headers):
         path = "/inspector/api/inspector/submitCheckerTask"
         res = requests.post(self.url+path,json={
-            "id	":id,
+            "id":id,
             "expectPrice":expectPrice,
             "inspectorDecision":inspectorDecision,
             "remarks":remarks
@@ -915,9 +927,12 @@ class Interface:
     def editCarInfoInspector(self,id,brand,model,chassisNumber,currentColor,currentMileage,engineCapacity,engineNumber,existingLoan,
                     fuelType,licensePlateNumber,manufacturedYear,originalColor,registrationDate,registrationType,reservedPrice,
                     roadTaxExpiryDate,seat,soldWithLicensePlate,transmission,variant,inspectionNotes,spareKey,b5,location,dealerIndicator,headers):
+        # print(id,brand,model,chassisNumber,currentColor,currentMileage,engineCapacity,engineNumber,existingLoan,
+        #             fuelType,licensePlateNumber,manufacturedYear,originalColor,registrationDate,registrationType,reservedPrice,
+        #             roadTaxExpiryDate,seat,soldWithLicensePlate,transmission,variant,inspectionNotes,spareKey,b5,location,dealerIndicator)
         path = "/inspector/api/inspector/editCarInfo"
         res = requests.post(self.url+path,json={
-            "id	":id,
+            "id":id,
             "brand":brand,
             "model":model,
             "chassisNumber":chassisNumber,

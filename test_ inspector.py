@@ -15,7 +15,7 @@ redis = Redis()
 def raddomPhone():#随机生成不重复的手机号
     headList = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139",
                "147", "150", "151", "152", "153", "155", "156", "157", "158", "159",
-               "186", "187", "188", "189"]
+               "186", "187", "188", "189","100","190","199"]
     phoneNum = random.choice(headList) + "".join(random.choice("0123456789") for i in range(8))
     return phoneNum
 
@@ -274,30 +274,91 @@ headers = {'Authorization': 'Bearer '+check_token}
 # print("更新headers，检车员登录token：",headers)
 #2.编辑车辆信息
 editCarInfo = inter.editCarInfoInspector(
-    id, 
-    brand, 
-    model, 
-    chassisNumber, 
-    currentColor, 
-    currentMileage, 
-    engineCapacity, 
-    engineNumber, 
-    existingLoan, 
-    fuelType, 
-    licensePlateNumber, 
-    manufacturedYear, 
-    originalColor, 
-    registrationDate, 
-    registrationType, 
-    reservedPrice, 
-    roadTaxExpiryDate, 
-    seat, soldWithLicensePlate, 
-    transmission, 
-    variant, 
-    inspectionNotes, 
-    spareKey, 
-    b5, 
-    location, 
-    dealerIndicator, 
-    headers
+    id = InspectionsId, 
+    brand = "AUDI", 
+    model = "100", 
+    chassisNumber = "cno", 
+    currentColor = "cc", 
+    currentMileage = "99", 
+    engineCapacity = "2.0", 
+    engineNumber = "eno", 
+    existingLoan = "false", 
+    fuelType = "Electric", 
+    licensePlateNumber = "lno", 
+    manufacturedYear = "1993", 
+    originalColor = "oc", 
+    registrationDate = "2021-06-17T04:00:00Z", 
+    registrationType = "Company", 
+    reservedPrice = "999", 
+    roadTaxExpiryDate = "2021-06-17T04:00:00Z", 
+    seat = "10", 
+    soldWithLicensePlate = "false", 
+    transmission = "MT", 
+    variant = "variant", 
+    inspectionNotes = "a\nb", 
+    spareKey = "Yes", 
+    b5 = "Yes", 
+    location = "Segamat", 
+    dealerIndicator = "false", 
+    headers = headers
 )
+print("编辑车辆信息返回：",editCarInfo.json())
+#3.编辑车辆损伤信息
+position1 = "Jerking"
+photos1 = ["car/seller/corpSsm/252/9f328e8c5c3a41e1bd8dc9b4bd39bf84.png"]
+position2 = "Misfire"
+photos2 = ["car/seller/corpSsm/252/9f328e8c5c3a41e1bd8dc9b4bd39bf84.png"]
+position3 = "Lack of Power"
+photos3 = ["car/seller/corpSsm/252/9f328e8c5c3a41e1bd8dc9b4bd39bf84.png"]
+position4 = "Stalling"
+photos4 = ["car/seller/corpSsm/252/9f328e8c5c3a41e1bd8dc9b4bd39bf84.png"]
+editCarDamageInfo = inter.editCarDamageInfoInspector(
+    id = InspectionsId, 
+    position1 = position1,
+    photos1 = photos1, 
+    position2 = position2, 
+    photos2 = photos2, 
+    position3 = position3, 
+    photos3 = photos3,
+    position4 = position4,
+    photos4 = photos4, 
+    headers = headers
+)
+print("编辑车辆损伤信息返回：",editCarDamageInfo.json())
+#4.提交检车任务
+submitCheckerTask = inter.submitCheckerTask(
+    id = InspectionsId, 
+    expectPrice = "999", 
+    inspectorDecision = "InspectorDecision"+Random, 
+    remarks = "Remarks"+Random, 
+    headers = headers
+)
+print("提交检车任务返回：",submitCheckerTask.json())
+print("App编辑提交检车","="*100,"完毕")
+headers = {'Authorization': 'Bearer '+token}#还原headers
+#7、审核详情
+#必须先查看详情才能审核
+auditInspectionInfo = inter.auditInspectionInfo(
+    id = InspectionsId, 
+    headers = headers
+)
+# print("审核详情返回：",auditInspectionInfo.json())
+#8、审核成功
+#回到admin审核检车单
+auditSuccess_inspector = inter.auditSuccessInspector(
+    no = InspectionsId, 
+    comment = "bidding", 
+    price = 9999, 
+    headers = headers
+)
+print("审核成功返回：",auditSuccess_inspector.json())
+#9、已完成检车单详情
+print("确认检车单已完成：","#"*100)
+#确认检车单审核完成的
+def test_inspector():
+    finishedInspectionInfo = inter.finishedInspectionInfo(
+        id = InspectionsId, 
+        headers = headers
+    )
+    Response_finishedInspectionInfo = finishedInspectionInfo.json()['success']
+    assert Response_finishedInspectionInfo == True
