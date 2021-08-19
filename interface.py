@@ -1081,8 +1081,8 @@ class Interface:
     
     '''【车辆管理2.0】'''
     #获取车辆列表
-    def getCarListUser(self,headers):
-        path = "/user/admin/api/user/userChangeHistory"
+    def getCarListInspector(self,headers):
+        path = "/inspector/admin/api/car/getCarList"
         res = requests.get(self.url+path,headers=headers)
         return res
     #获取关联卖家
