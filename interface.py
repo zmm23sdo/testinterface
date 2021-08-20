@@ -1306,7 +1306,7 @@ class Interface:
     #获取竞标场次列表
     def queryBiddingBlock(self,headers):
         path = "/bidding/admin/api/bidding/queryBiddingBlock"
-        res = requests.get(self.url,headers=headers)
+        res = requests.get(self.url+path,headers=headers)
         return res
     #批量关联车辆
     def slotCars(self,id,numbers,headers):
