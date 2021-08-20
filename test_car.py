@@ -15,7 +15,8 @@ redis = Redis()
 def raddomPhone():#随机生成不重复的手机号
     headList = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139",
                "147", "150", "151", "152", "153", "155", "156", "157", "158", "159",
-               "186", "187", "188", "189", "100", "190", "199", "210", "211", "212"]
+               "186", "187", "188", "189", "100", "190", "199", "210", "211", "212",
+               "140", "141", "142", "143", "144", "145", "146", "437", "148", "149"]
     phoneNum = random.choice(headList) + "".join(random.choice("0123456789") for i in range(8))
     return phoneNum
 
@@ -88,7 +89,7 @@ headers = {'Authorization': 'Bearer '+token}
 print("="*100)
 
 #创建新seller
-print("创建新的Seller给Car用：","!"*100,"开始")
+print("创建新的Seller给Car用：","-"*100,"开始")
 ##1.新建corp seller
 phoneNumber = raddomPhone()
 phonePrefix = "+86"
@@ -112,10 +113,10 @@ querySellerAccount_car = inter.querySellerAccount(
 # print("查询seller返回：",querySellerAccount_car.json())
 querySellerAccount_car_list = querySellerAccount_car.json()
 #循环取出
-for a in querySellerAccount_car_list["data"]:
-    if a["name"] == name:
-        print(a["id"],a["name"])
-        carSeller_id = str(a["id"])
+for a in querySellerAccount_car_list['data']:
+    if a['name'] == name:
+        print(a['id'],a['name'])
+        carSeller_id = str(a['id'])
         break
 print("获取新建的seller的id：",carSeller_id)
 ##3.获取可选经办人列表
@@ -126,10 +127,10 @@ getSellerExecutive_car = inter.getSellerExecutiveId(
 # print("获取可选经办人列表返回：",getSellerExecutive_car.json())
 getSellerExecutive_car_list = getSellerExecutive_car.json()
 #循环取出
-for b in getSellerExecutive_car_list["data"]:
-    if b["name"] == username_test:
-        print(b["id"],b["name"])
-        usertest_id = str(b["id"])
+for b in getSellerExecutive_car_list['data']:
+    if b['name'] == username_test:
+        print(b['id'],b['name'])
+        usertest_id = str(b['id'])
         break
 print("当前登录用户的审核id：",usertest_id)
 ##4.指定经办人
@@ -176,12 +177,12 @@ auditSuccess_car = inter.auditSuccessSeller(
     headers = headers
 )
 print("审核通过返回：",auditSuccess_car.json())
-print("创建新的Seller给Car用：","!"*100,"完毕")
+print("创建新的Seller给Car用：","-"*100,"完毕")
 
 #1、添加车辆
 createCar = inter.createCar(
-    brand = "ALFA ROMEO", 
-    model = "145", 
+    brand = "BMW", 
+    model = "1", 
     manufacturedYear = "1990", 
     type = "2", 
     customerId = carSeller_id, 
@@ -200,9 +201,124 @@ getCarList = inter.getCarListInspector(
 getCarList_list = getCarList.json()
 ##根据Seller手机号获取新建的车辆id
 #循环取出
-for c in getCarList_list["data"]:
-    if c["customerName"] == name:
-        print(c["number"],c["customerName"])
-        Car_number = str(c["number"])
+for c in getCarList_list['data']:
+    if c['customerName'] == name:
+        print(c['number'],c['customerName'])
+        Car_number = str(c['number'])
         break
 print("获取新建的车辆id：",Car_number)
+#3、创建检车报告
+createInspectionReport = inter.createInspectionReport(
+    number = Car_number, 
+    headers = headers
+)
+print("创建检车报告返回：",createInspectionReport.json())
+#4、获取车辆检车报告列表
+getCarInspectionReports = inter.getCarInspectionReports(
+    number = Car_number, 
+    headers = headers
+)
+# print("获取车辆检车报告列表返回：",getCarInspectionReports.json())
+report_id = getCarInspectionReports.json()['data']['reports'][0]['id']
+print("获取车辆检车报告id：",report_id)
+#4、编辑车辆损伤信息
+position1 = "Jerking"
+position2 = "Misfire"
+position3 = "Lack of Power"
+position4 = "Stalling"
+photo = "car/seller/corpSsm/252/9f328e8c5c3a41e1bd8dc9b4bd39bf84.png"
+editCarDamageInfo1 = inter.editCarDamageInfoCar(
+    id = report_id, 
+    name = "Engine Acceleration",
+    photo = photo, 
+    position = position1, 
+    headers = headers
+)
+print("编辑车辆损伤信息返回1：",editCarDamageInfo1.json())
+editCarDamageInfo2 = inter.editCarDamageInfoCar(
+    id = report_id, 
+    name = "Engine Acceleration",
+    photo = photo, 
+    position = position2, 
+    headers = headers
+)
+print("编辑车辆损伤信息返回2：",editCarDamageInfo2.json())
+editCarDamageInfo3 = inter.editCarDamageInfoCar(
+    id = report_id, 
+    name = "Engine Acceleration",
+    photo = photo, 
+    position = position3, 
+    headers = headers
+)
+print("编辑车辆损伤信息返回3：",editCarDamageInfo3.json())
+editCarDamageInfo4 = inter.editCarDamageInfoCar(
+    id = report_id, 
+    name = "Engine Acceleration",
+    photo = photo, 
+    position = position4, 
+    headers = headers
+)
+print("编辑车辆损伤信息返回4：",editCarDamageInfo4.json())
+#5、编辑车辆信息
+editCarInfo = inter.editCarInfoCar(
+    id = report_id, 
+    brand = "BMW", 
+    model = "1", 
+    chassisNumber = "cno", 
+    currentColor = "cc", 
+    currentMileage = "99", 
+    engineCapacity = "2.0", 
+    engineNumber = "eno", 
+    existingLoan = "false", 
+    fuelType = "Electric", 
+    licensePlateNumber = "lno", 
+    manufacturedYear = "1990", 
+    originalColor = "oc", 
+    registrationDate = "2021-06-17T04:00:00Z", 
+    registrationType = "Company", 
+    reservedPrice = "999", 
+    roadTaxExpiryDate = "2021-06-17T04:00:00Z", 
+    seat = "10", 
+    soldWithLicensePlate = "false", 
+    transmission = "MT", 
+    variant = "variant", 
+    inspectionNotes = "a\nb", 
+    spareKey = "Yes", 
+    b5 = "Yes", 
+    location = "Segamat", 
+    dealerIndicator = "false", 
+    headers = headers
+)
+print("编辑车辆信息返回：",editCarInfo.json())
+#6、确认检车报告
+confirmInspectionReport = inter.confirmInspectionReport(
+    id = report_id, 
+    headers = headers
+)
+print("确认检车报告返回：",confirmInspectionReport.json())
+#7、编辑检车备注
+editInspectionNotes = inter.editInspectionNotes(
+    id = report_id, 
+    comment = "Test Car"+Random, 
+    headers = headers
+)
+print("编辑检车备注返回：",editInspectionNotes.json())
+#8、获取车辆检车报告完成情况
+getReportRequiredInfo = inter.getReportRequiredInfo(
+    id = report_id, 
+    headers = headers
+)
+print("获取车辆检车报告完成情况返回：",getReportRequiredInfo.json())
+#9、获取车辆检车报告列表
+
+getCarInspectionReports = inter.getCarInspectionReports(
+    number = Car_number, 
+    headers = headers
+)
+print("获取车辆检车报告列表返回：",getCarInspectionReports.json())
+report_id2 = getCarInspectionReports.json()['data']['reports'][0]['id']
+print("-"*100)
+print("检车单id:",report_id)
+print("检车单id2:",report_id2)
+def test_car():
+    assert report_id2 == report_id

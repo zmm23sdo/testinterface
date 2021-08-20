@@ -1254,7 +1254,7 @@ class Interface:
             "id":id,
             "name":name,
             "position":position,
-            "photo":photo
+            "path":photo
         },headers=headers)
         return res
     #删除车辆损伤信息
