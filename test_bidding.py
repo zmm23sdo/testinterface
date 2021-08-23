@@ -86,8 +86,8 @@ print("="*100)
 
 #1、批量添加竞标场次
 #时间设置
-day = 12
-mintue = 11
+day = 27
+mintue = 26
 time_notice = "2021-09-"+str(day)+"T19:"+str(mintue)+":00.337276Z"
 mintue = str(int(mintue)+30)
 time_start = "2021-09-"+str(day)+"T19:"+mintue+":00.337276Z"
@@ -120,21 +120,86 @@ for a in queryBiddingBlock_list["data"]:
         break
 print("获取竞标场次id：",bidding_id)
 
+#添加车辆
+# print("="*100)
+# createCar = inter.createCar(
+#     brand = "BMW", 
+#     model = "1", 
+#     manufacturedYear = "1990", 
+#     type = "2", 
+#     customerId ="478", 
+#     customerName = "Carseller孙雁雁", 
+#     customerType = "seller", 
+#     phonePrefix = "+86", 
+#     phoneNumber = "21234215499", 
+#     headers = headers
+# )
+# print("添加车辆：",createCar.json())
+# print("="*100)
+
 #3、获取待关联车辆列表
 getApprovedCars = inter.getApprovedCars(
     id = bidding_id, 
     headers = headers
 )
 print("获取待关联车辆列表返回：",getApprovedCars.json())
+print("-"*100)
 #取出前三车辆的Number
-car_number1 = getApprovedCars.json()['data']['cars'][0]['number'][0]
-car_number2 = getApprovedCars.json()['data']['cars']['number'][1]
-car_number2 = getApprovedCars.json()['data']['cars']['number'][2]
-#4、批量关联车辆
-slotCars = inter.slotCars(
-    id = bidding_id, 
-    numbers = [str(car_number1),str(car_number2),str(car_number2)], 
+car_number1 = getApprovedCars.json()['data']['cars'][0]['number']
+# car_number2 = getApprovedCars.json()['data']['cars'][1]['number']
+# car_number3 = getApprovedCars.json()['data']['cars'][2]['number']
+print("car_number1:",car_number1)
+# print("car_number2:",car_number2)
+# print("car_number3:",car_number3)
+
+#4、变更车辆起拍价
+editReservedPrice = inter.editReservedPrice(
+    number = car_number1, 
+    reservedPrice = "1000", 
     headers = headers
 )
+print("变更车辆起拍价返回：",editReservedPrice.json())
+
+# editReservedPrice = inter.editReservedPrice(
+#     number = car_number2, 
+#     reservedPrice = "1000", 
+#     headers = headers
+# )
+# print("变更车辆起拍价返回：",editReservedPrice.json())
+
+# editReservedPrice = inter.editReservedPrice(
+#     number = car_number3, 
+#     reservedPrice = "1000", 
+#     headers = headers
+# )
+# print("变更车辆起拍价返回：",editReservedPrice.json())
+#5、批量关联车辆
+slotCars = inter.slotCars(
+    id = bidding_id, 
+    numbers = [str(car_number1)], 
+    headers = headers
+)
+
 print("批量关联车辆返回：",slotCars.json())
 
+#6、获取竞标场次详情
+getBiddingBlockInfo = inter.getBiddingBlockInfo(
+    id = bidding_id, 
+    headers = headers
+)
+print("获取竞标场次详情返回：",getBiddingBlockInfo.json())
+
+#7、获取竞标场次关联车辆列表
+getSlottedCars = inter.getSlottedCars(
+    id = bidding_id, 
+    pageSize = "100", 
+    headers = headers
+)
+print("获取竞标场次关联车辆列表返回：",getSlottedCars.json())
+car_number_list =list(map(lambda x:x['carNumber'],getSlottedCars.json()['data']))
+print("*"*100)
+print(car_number1)
+print(car_number_list)
+print("*"*100)
+def test_bidding():
+    assert int(car_number1) in car_number_list

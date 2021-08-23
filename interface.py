@@ -1310,6 +1310,7 @@ class Interface:
         return res
     #批量关联车辆
     def slotCars(self,id,numbers,headers):
+        # print(numbers)
         path = "/inspector/admin/api/car/slotCars"
         res = requests.post(self.url+path,json={
             "id":id,
