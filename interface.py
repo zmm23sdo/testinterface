@@ -1460,9 +1460,10 @@ class Interface:
         },headers=headers)
         return res
     #查看预约信息
-    def appointmentInfo(self,headers):
+    def appointmentInfo(self,id,headers):
         path = "/trans/admin/api/transaction/appointmentInfo"
-        res = requests.get(self.url+path,headers=headers)
+        res = requests.get(self.url+path,params={"id":id}
+        ,headers=headers)
         return res
     #提交预约信息
     def submitAppointmentInfo(self,bizId,appointmentDate,province,district,zipCode,detail,files,transAmount,headers):
@@ -1494,7 +1495,8 @@ class Interface:
         return res
     #获取sellerTX
     def sellerTransInfo(self,id,headers):
-        path = "/trans/admin/api/transaction/appointmentInfo"
+        # print(id)
+        path = "/trans/admin/api/transaction/sellerTransInfo"
         res = requests.get(self.url+path,params={
             "id":id
         },headers=headers)

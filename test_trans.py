@@ -23,7 +23,7 @@ def raddomPhone():#随机生成不重复的手机号
                 "171", "172", "173", "174", "175", "176", "177", "178", "179", "180", 
                 "181", "182", "183", "184", "185", "186", "187", "188", "189", "190",
                 "191", "192", "193", "194", "195", "196", "197", "198", "199", "200"]
-    phoneNum = random.choice(headList) + "".join(random.choice("0123456789") for i in range(1))
+    phoneNum = random.choice(headList) + "".join(random.choice("0123456789") for i in range(10))
     return phoneNum
 
 def random_name():#随机生成姓名
@@ -416,3 +416,153 @@ assignExecutive = inter.assignExecutive(
 print("-"*100)
 print("指定分配人返回：",assignExecutive.json())
 print("-"*100)
+
+#4、保存预约信息
+#获取当前时间戳和日期
+#时间戳
+timenow = datetime.utcnow().isoformat()
+time_now = timenow+"Z"
+print("-"*100)
+print("获取当前时间:",time_now)
+print("-"*100)
+saveAppointmentInfo = inter.saveAppointmentInfo(
+    bizId = trans_id,
+    appointmentDate = time_now,
+    province = "Province"+Random,
+    district = "District"+Random,
+    zipCode = "ZipCode"+Random,
+    detail = "Detail"+Random,
+    files = "",
+    transAmount = "999",
+    headers = headers
+)
+print("-"*100)
+print("保存预约信息：",saveAppointmentInfo.json())
+print("-"*100)
+#5、查看预约信息
+appointmentInfo = inter.appointmentInfo(
+    id = trans_id,
+    headers = headers
+)
+print("-"*100)
+print("查看预约信息返回：",appointmentInfo.json())
+print("-"*100)
+#6、提交预约信息
+
+submitAppointmentInfo = inter.submitAppointmentInfo(
+    bizId = trans_id,
+    appointmentDate = time_now,
+    province = "Province"+Random,
+    district = "District"+Random,
+    zipCode = "ZipCode"+Random,
+    detail = "Detail"+Random,
+    files = "",
+    transAmount = "999",
+    headers = headers
+)
+print("-"*100)
+print("提交预约信息返回：",submitAppointmentInfo.json())
+print("-"*100)
+
+#7、获取seller交易员
+sellerTraders = inter.sellerTraders(
+    headers = headers
+)
+print("-"*100)
+print("获取seller交易员返回：",sellerTraders.json())
+print("-"*100)
+#获取Seller交易员id&姓名
+operatorId = str(sellerTraders.json()['data'][1]['id'])
+operatorName = str(sellerTraders.json()['data'][1]['name'])
+print("-"*100)
+print("获取Seller交易员id&姓名：",operatorId,operatorName)
+print("-"*100)
+#8、保存sellerTx
+#图片准备
+photo = "car/seller/corpSsm/252/9f328e8c5c3a41e1bd8dc9b4bd39bf84.png"
+type = "png"
+saveSellerTransInfo = inter.saveSellerTransInfo(
+    transDate = time_now, 
+    carLocation = "CarLocation"+Random, 
+    operatorId = operatorId, 
+    operatorName = operatorName, 
+    serviceFee = "100", 
+    loanAmount = "", 
+    remark = "Remark"+Random, 
+    type_purchaseInvoice = type, 
+    photo_purchaseInvoice = photo, 
+    name_purchaseInvoice = str(random_name()), 
+    type_odo = type, 
+    photo_odo = photo, 
+    name_odo = str(random_name()), 
+    type_vccl = type, 
+    photo_vccl = photo, 
+    name_vccl = str(random_name()), 
+    type_partyLetter = type, 
+    photo_partyLetter = photo, 
+    name_partyLetter = str(random_name()), 
+    transId = trans_id, 
+    headers = headers
+)
+print("-"*100)
+print("保存sellerTx返回：",saveSellerTransInfo.json())
+print("-"*100)
+#9、获取sellerTX
+sellerTransInfo = inter.sellerTransInfo(
+    id = trans_id, 
+    headers = headers
+)
+print("-"*100)
+print("获取sellerTX返回：",sellerTransInfo.json())
+print("-"*100)
+#10、提交sellerTX
+submitSellerTransInfo = inter.submitSellerTransInfo(
+    transDate = time_now, 
+    carLocation = "CarLocation"+Random, 
+    operatorId = operatorId, 
+    operatorName = operatorName, 
+    serviceFee = "100", 
+    loanAmount = "", 
+    remark = "Remark"+Random, 
+    type_purchaseInvoice = type, 
+    photo_purchaseInvoice = photo, 
+    name_purchaseInvoice = str(random_name()), 
+    type_odo = type, 
+    photo_odo = photo, 
+    name_odo = str(random_name()), 
+    type_vccl = type, 
+    photo_vccl = photo, 
+    name_vccl = str(random_name()), 
+    type_partyLetter = type, 
+    photo_partyLetter = photo, 
+    name_partyLetter = str(random_name()), 
+    transId = trans_id, 
+    headers = headers
+)
+print("-"*100)
+print("提交sellerTX返回：",submitSellerTransInfo.json())
+print("-"*100)
+
+
+
+
+
+queryTransOrder = inter.queryTransOrder(
+        headers = headers
+    )
+print("-"*100)
+print("查询交易返回：",queryTransOrder.json())
+print("-"*100)
+queryTransOrder_list = queryTransOrder.json()
+for f in queryTransOrder_list["data"]:
+    if str(f["fromId"]) == str(InspectionsId):
+        print("-"*100)
+        print("循环：",f["id"])
+        print("-"*100)
+        break
+    
+        
+################################################
+def test_trans():
+    assert str(trans_id) == str(f["id"])
+

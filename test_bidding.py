@@ -201,5 +201,6 @@ print("*"*100)
 print(car_number1)
 print(car_number_list)
 print("*"*100)
+###############################################
 def test_bidding():
     assert int(car_number1) in car_number_list
