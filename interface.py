@@ -1807,7 +1807,7 @@ class Interface:
     #清空
     def setEmpty(self,tag,headers):
         path = "/user/admin/api/account/setEmpty"
-        res = requests.get(self.url+path,params={
+        res = requests.post(self.url+path,json={
             "tag":tag
         },headers=headers)
         return res
